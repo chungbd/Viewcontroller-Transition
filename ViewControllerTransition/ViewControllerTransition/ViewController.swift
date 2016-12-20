@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet var touchView: UIView!
     
     let showingAnimation = ShowingAnimationController()
-    
+    let dismissAnimationController = DismissAnimationController()
     
     // MARK: - View life cycle
     override func viewDidLoad() {
@@ -32,16 +32,17 @@ class ViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handlingWhenTouchingOn(gesture:)))
         touchView.addGestureRecognizer(tapGesture)
     }
+    
     // MARK: - Public Methods
     //    class func instantiate() -> SpeakerVC {
     //        return UIStoryboard(name: "", bundle: nil).instantiateInitialViewController() as! SpeakerVC
     //    }
+    
     func handlingWhenTouchingOn(gesture:UIGestureRecognizer)  {
         let secondVC = SecondViewController.instantiate()
         secondVC.transitioningDelegate = self
         present(secondVC, animated: true, completion: nil)
     }
-    
     
     // MARK: - IB Outlet Action
     @IBAction func touchUpInside_btn(sender: UIButton) {
@@ -62,5 +63,10 @@ class ViewController: UIViewController {
 extension ViewController:UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return showingAnimation
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        dismissAnimationController.destinationFrame = touchView.frame
+        return dismissAnimationController
     }
 }
